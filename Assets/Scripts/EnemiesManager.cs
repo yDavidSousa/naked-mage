@@ -35,18 +35,22 @@ public class EnemiesManager : MonoBehaviour {
 		actualGroundSpawnPoint = spawnPointGround1;
 
 		// chama primeira horda
-		SpawnEnemies ();
+		StartCoroutine(SpawnEnemies());
 	}
 
 	void Update () {
 		if (GameObject.FindGameObjectsWithTag("Enemy").Length <= 0 && inBattle) {
 			inBattle = false;
 			horde++; // próxima horda
-			SpawnEnemies(); // instância os inimigos
+			StartCoroutine(SpawnEnemies()); // instância os inimigos
 		}
 	}
 
-	void SpawnEnemies () {
+	IEnumerator SpawnEnemies () {
+		
+		// alerta ao player sobre a nova horda
+		StartCoroutine(GameManager.instance.AlertNewHorde());
+		yield return new WaitForSecondsRealtime(1f);
 
 		// ativa tipo de inimigo de acordo com a horda atual
 		if (horde > 2 && horde <= 4) {

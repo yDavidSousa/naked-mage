@@ -26,7 +26,6 @@ public class GameManager : MonoBehaviour {
 	
 	void Update () {
 		UpdateHUD();	
-		UpdateHordNumber();	
 	}
 
 	void UpdateHUD () {
@@ -34,8 +33,17 @@ public class GameManager : MonoBehaviour {
 		HUD_Mana.fillAmount = playerMana / 100;
 	}
 
-	void UpdateHordNumber () {
+	public IEnumerator AlertNewHorde () {
 		hordCounter.text = "Horde " + EnemiesManager.instance.horde;
+		battleStart.text = "3";
+		yield return new WaitForSecondsRealtime(0.5f);
+		battleStart.text = "2";
+		yield return new WaitForSecondsRealtime(0.5f);
+		battleStart.text = "1";
+		yield return new WaitForSecondsRealtime(0.5f);
+		battleStart.text = "Kill them all!";
+		yield return new WaitForSecondsRealtime(0.5f);
+		battleStart.text = "";
 	}
 
 	void SetPower () {
