@@ -56,8 +56,9 @@ public class EarthEnemy : MonoBehaviour {
 
 	void OnTriggerEnter2D (Collider2D collider2D) {
 
-		if (collider2D.gameObject.CompareTag("Power")) 
-			Destroy(gameObject, 1f);
+		if (collider2D.gameObject.CompareTag("Power"))  {
+			Destroy(this.gameObject, 0.1f);
+		}
 
 		if (collider2D.gameObject.CompareTag("Collider")) {
 			if (transform.rotation.eulerAngles.y > 0)
