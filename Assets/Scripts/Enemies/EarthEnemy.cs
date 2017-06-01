@@ -57,6 +57,7 @@ public class EarthEnemy : MonoBehaviour {
 	void OnTriggerEnter2D (Collider2D collider2D) {
 
 		if (collider2D.gameObject.CompareTag("Power"))  {
+			GameManager.instance.UpdateScore(15);
 			Destroy(this.gameObject, 0.1f);
 		}
 

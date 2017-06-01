@@ -43,6 +43,7 @@ public class EnemiesManager : MonoBehaviour {
 			inBattle = false;
 			horde++; // próxima horda
 			StartCoroutine(SpawnEnemies()); // instância os inimigos
+			GameManager.instance.UpdateScore(50 * horde);
 		}
 	}
 

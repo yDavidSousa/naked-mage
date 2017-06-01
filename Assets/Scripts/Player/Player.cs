@@ -83,7 +83,7 @@ public class Player : MonoBehaviour {
 		Debug.Log("Player atacou na direção " + direction.ToString());
 	}
 
-	void TakeDamage (int damage) {
+	void TakeDamage (float damage) {
 		GameManager.instance.playerHp -= damage;
 		if (GameManager.instance.playerHp <= 0)
 			Die();
@@ -91,7 +91,7 @@ public class Player : MonoBehaviour {
 	}
 
 	void Die () {
-		GameManager.instance.playerDead = false;
+		GameManager.instance.playerDead = true;
 		// LANÇAR PREFAB DE MORTE
 		gameObject.SetActive(false);
 		Debug.Log("Player morreu");
@@ -102,7 +102,7 @@ public class Player : MonoBehaviour {
 	*/
 	
 	void OnCollisionEnter2D (Collision2D collision2D) {
-		if (collision2D.gameObject.CompareTag("Ground") && !inGround) // tocando no chão
+		if (collision2D.gameObject.CompareTag("Ground") && !inGround) // tocando o chão
 			inGround = true;
 	}
 
@@ -111,13 +111,18 @@ public class Player : MonoBehaviour {
 			TakeDamage(5);
 	}
 
+	void OnTriggerStay2D (Collider2D collider2D) {
+		if (collider2D.gameObject.CompareTag("Enemy")) // permanece sendo atacado
+			TakeDamage(0.1f);
+	}
+
 	void OnCollisionStay2D (Collision2D collision2D) {
-		if (collision2D.gameObject.CompareTag("Ground") && !inGround) 
+		if (collision2D.gameObject.CompareTag("Ground") && !inGround) // tocando o chão
 			inGround = true;
 	}
 	
 	void OnCollisionExit2D (Collision2D collision2D) {
-		if (collision2D.gameObject.CompareTag("Ground") && inGround)
+		if (collision2D.gameObject.CompareTag("Ground") && inGround) // saindo do chão
 			inGround = false;
 	}
 
