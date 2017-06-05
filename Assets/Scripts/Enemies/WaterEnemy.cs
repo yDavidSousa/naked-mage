@@ -59,6 +59,9 @@ public class WaterEnemy : MonoBehaviour {
         playerDistance = Vector3.Distance(playerPosition, transform.position);
         attackDelay += Time.deltaTime;
 
+        if (!Physics2D.Raycast(transform.position, Vector2.down, 0.15f, 1 << LayerMask.NameToLayer("Ground"))) // GRAVIDADE PARA QUEDA (:
+            transform.position += Vector3.down * velocity * Time.deltaTime;
+
         if (playerDistance < 0.9f && 
                         (actualState == EnemyStates.IDLE || actualState == EnemyStates.INGUARD))
             SetState(EnemyStates.ALERT); // Se a distância até o player é menor que 0.9 unidades, muda o estado para alerta
@@ -134,5 +137,4 @@ public class WaterEnemy : MonoBehaviour {
 		}
 
 	}
-
 }
