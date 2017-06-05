@@ -6,7 +6,6 @@ public class EarthEnemy : MonoBehaviour {
 
 
 	public Animator animator;
-	public Animation animation;
 	public bool inGround;
 	public float velocity = 0.1f;
 	public Vector3 playerPosition;

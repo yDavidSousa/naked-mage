@@ -10,6 +10,7 @@ public enum attackDirection {
 public class Player : MonoBehaviour {
 
 	private Rigidbody2D rigidbody2D;
+	private RaycastHit2D hit;
 	public GameObject skill;
 
 	public Animator playerAnimator;
@@ -27,11 +28,12 @@ public class Player : MonoBehaviour {
 		inGround = true;
 	}
 	
-
 	void Update () {
 		horizontalMovement = Input.GetKey(btLeft) || Input.GetKey(btRight);
 		verticalMovement = Input.GetKey(btUp) || Input.GetKey(btDown);
 		jumping = Input.GetKeyDown(btJump);
+
+		inGround = Physics2D.Raycast(transform.position, Vector2.down, 0.15f, 1 << LayerMask.NameToLayer("Ground"));
 
 		if (Input.GetKeyDown(btAttack)) { 
 			if (!inGround) { // attack in air
@@ -56,16 +58,32 @@ public class Player : MonoBehaviour {
 	}
 
 	/*
+	* ATUALIZA OS COLISORES DAS PLATAFORMAS DE ACORDO COM A POSIÇÃO DO PLAYER.
+	* SE ESTÁ EM CIMA DESATIVA O TRIGGER, SE ESTÁ AO LADO OU EMBAIXO, ATIVA.
+	*/
+	void FixedUpdate () {
+		hit = Physics2D.Raycast(transform.position, Vector2.down, 0.1f, 1 << LayerMask.NameToLayer("Ground"));
+		if (hit) hit.collider.isTrigger = false;
+
+		hit = Physics2D.Raycast(transform.position, Vector2.left, 0.5f, 1 << LayerMask.NameToLayer("Ground"));
+		if (hit) hit.collider.isTrigger = true;
+		hit = Physics2D.Raycast(transform.position, Vector2.right, 0.5f, 1 << LayerMask.NameToLayer("Ground"));
+		if (hit) hit.collider.isTrigger = true;
+		hit = Physics2D.Raycast(transform.position, Vector2.up, 0.1f, 1 << LayerMask.NameToLayer("Ground"));
+		if (hit) hit.collider.isTrigger = true;
+	}
+
+	/*
 	AÇÕES
 	*/
 
 	void RunInHorizontal () {
 		if (Input.GetAxis("Horizontal") > 0) {
 			transform.rotation = Quaternion.identity;
-			transform.position += Vector3.right * velocity;
+			transform.position += Vector3.right * velocity * Time.deltaTime;
 		} else {
 			transform.rotation = Quaternion.Euler(0, 180, 0);
-			transform.position += Vector3.left * velocity;
+			transform.position += Vector3.left * velocity * Time.deltaTime;
 		}
 		setRunningAnimation();
 	}
@@ -102,28 +120,22 @@ public class Player : MonoBehaviour {
 	*/
 	
 	void OnCollisionEnter2D (Collision2D collision2D) {
-		if (collision2D.gameObject.CompareTag("Ground") && !inGround) // tocando o chão
-			inGround = true;
+		if (collision2D.gameObject.CompareTag("Enemy")) // sendo atacado
+			TakeDamage(10);
+	}
+	void OnCollisionStay2D (Collision2D collision2D) {
+		if (collision2D.gameObject.CompareTag("Enemy")) // sendo atacado
+			TakeDamage(0.1f);
 	}
 
 	void OnTriggerEnter2D (Collider2D collider2D) {
-		if (collider2D.gameObject.CompareTag("Enemy")) // sendo atacado
+		if (collider2D.gameObject.CompareTag("Enemy"))
 			TakeDamage(5);
 	}
 
 	void OnTriggerStay2D (Collider2D collider2D) {
-		if (collider2D.gameObject.CompareTag("Enemy")) // permanece sendo atacado
+		if (collider2D.gameObject.CompareTag("Enemy"))
 			TakeDamage(0.1f);
-	}
-
-	void OnCollisionStay2D (Collision2D collision2D) {
-		if (collision2D.gameObject.CompareTag("Ground") && !inGround) // tocando o chão
-			inGround = true;
-	}
-	
-	void OnCollisionExit2D (Collision2D collision2D) {
-		if (collision2D.gameObject.CompareTag("Ground") && inGround) // saindo do chão
-			inGround = false;
 	}
 
 	/* 

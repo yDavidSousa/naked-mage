@@ -2,6 +2,15 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+
+public enum EnemyStates {
+    IDLE, // DE BOA
+    INGUARD, // EM GUARDA
+    ALERT, // DETECTOU PLAYER
+    AGRESSIVE, // PERSEGUE PLAYER
+    ATTACK // ATACA PLAYER
+}
+
 public class EnemiesManager : MonoBehaviour {
 
 	public static EnemiesManager instance;
@@ -54,11 +63,11 @@ public class EnemiesManager : MonoBehaviour {
 		yield return new WaitForSecondsRealtime(1f);
 
 		// ativa tipo de inimigo de acordo com a horda atual
-		if (horde > 2 && horde <= 4) {
+		if (horde > 1) {
 			waterEnemies = true;
-		} else if (horde > 4 && horde <= 6) {
+		} if (horde > 2) {
 			fireEnemies = true;
-		} else if (horde > 6) {
+		} if (horde > 4) {
 			flyingEnemies = true;
 		}
 
@@ -69,16 +78,19 @@ public class EnemiesManager : MonoBehaviour {
 			for (j = 1 ; j <= 5; j++) {
 				switch (aleatoryEnemy()) {
 					case 0:
-						StartCoroutine(instantiateEnemy(enemyEarth, actualGroundSpawnPoint, j*i));
+						StartCoroutine(instantiateEnemy(enemyEarth, actualGroundSpawnPoint, j*i/2));
 						break;
 					case 1:
-						StartCoroutine(instantiateEnemy(enemyWater, actualGroundSpawnPoint, j*i));
+						StartCoroutine(instantiateEnemy(enemyWater, actualGroundSpawnPoint, j*i/2));
 						break;
 					case 2:
-						StartCoroutine(instantiateEnemy(enemyFire, actualGroundSpawnPoint, j*i));
+						StartCoroutine(instantiateEnemy(enemyFire, actualGroundSpawnPoint, j*i/2));
 						break;
 					case 3: 
-						StartCoroutine(instantiateEnemy(enemyAir, actualAirSpawnPoint, j*i));
+						StartCoroutine(instantiateEnemy(enemyAir, actualAirSpawnPoint, j*i/2));
+						break;
+					default: 
+						StartCoroutine(instantiateEnemy(enemyFire, actualGroundSpawnPoint, j*i/2));
 						break;
 				}
 				ChangeSpawnPoint();
@@ -88,16 +100,15 @@ public class EnemiesManager : MonoBehaviour {
 	}
 
 	int aleatoryEnemy () {
-		/*if (!waterEnemies && !fireEnemies && !flyingEnemies)
+		if (!waterEnemies && !fireEnemies && !flyingEnemies)
 			return 0;
 		else {
 			if (flyingEnemies)
-				return Mathf.RoundToInt(Random.Range(0, 3));
+				return Mathf.RoundToInt(Random.Range(0, 4));
 			else 
-			return (fireEnemies) ? Mathf.RoundToInt(Random.Range(0, 2)):
-								   Mathf.RoundToInt(Random.Range(0, 1));
-		}*/
-		return 0;
+			return (fireEnemies) ? Mathf.RoundToInt(Random.Range(0, 3)):
+								   Mathf.RoundToInt(Random.Range(0, 2));
+		}
 	}
 
 

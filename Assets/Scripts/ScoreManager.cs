@@ -16,14 +16,10 @@ public sealed class ScoreManager : MonoBehaviour {
     }
 
     public void AddScore (string name, int score) {
-        int oldScore;
-        string oldName;
-
+        
         for (int i = 0; i < 5; i++) {
             if (PlayerPrefs.HasKey(i+"Score")) {
                 if (PlayerPrefs.GetInt(i+"Score")  < score) {
-                    oldScore = PlayerPrefs.GetInt(i+"Score");
-                    oldName = PlayerPrefs.GetString(i+"ScoreName");
                     PlayerPrefs.SetInt(i+"Score", score);
                     PlayerPrefs.SetString(i+"ScoreName", name);
                     break;
