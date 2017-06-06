@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using DG.Tweening;
 
 public sealed class AirEnemy : MonoBehaviour {
     
@@ -49,7 +50,7 @@ public sealed class AirEnemy : MonoBehaviour {
         playerDistance = Vector3.Distance(playerPosition, transform.position);
         attackDelay += Time.deltaTime;
 
-        if (playerDistance < 0.9f && 
+        if (playerDistance < 0.7f && 
                         (actualState == EnemyStates.IDLE || actualState == EnemyStates.INGUARD))
             SetState(EnemyStates.AGRESSIVE); // Se a distância até o player é menor que 0.9 unidades, muda o estado para alerta
 
@@ -63,9 +64,9 @@ public sealed class AirEnemy : MonoBehaviour {
                 MoveTo(targetPosition); // Só fica se movendo de um lado para o outro
                 break;
             case EnemyStates.AGRESSIVE:
-                if (Mathf.Abs(playerPosition.y - transform.position.y) > 0.2f)  
-                    SetState(EnemyStates.INGUARD); // Se o player não estiver na mesma plataforma que o inimigo, volta ao estado Idle
-                else if (playerDistance < 0.5f && attackDelay > 1.5f)
+                if (Mathf.Abs(playerPosition.y - transform.position.y) > 1f)  
+                    SetState(EnemyStates.INGUARD); 
+                else if (playerDistance < 0.4f && attackDelay > 1.5f)
                     SetState(EnemyStates.ATTACK);
 
                 MoveTo(playerPosition);
@@ -92,13 +93,16 @@ public sealed class AirEnemy : MonoBehaviour {
                                 Vector3.right * velocity * Time.deltaTime : Vector3.right * difference;
         }
 
-        if (Mathf.Abs(destiny.x - transform.position.x) <= 0.05f)
+        if (Mathf.Abs(destiny.x - transform.position.x) <= 0.05f && actualState == EnemyStates.INGUARD)
             SetState(EnemyStates.IDLE);
     }
 
     IEnumerator Attack () {
         if (attackDelay > 1.5f) {
-            attackDelay = 0f;
+            attackDelay = 0f; 
+            transform.DOMove(Vector3.MoveTowards(transform.position, playerPosition, 1f), 0.2f).
+						SetLoops(-1, LoopType.Yoyo).
+						SetEase(Ease.Linear);
             yield return new WaitForSecondsRealtime(0.85f);
             SetState(EnemyStates.AGRESSIVE);
         }
@@ -107,7 +111,7 @@ public sealed class AirEnemy : MonoBehaviour {
 	void OnTriggerEnter2D (Collider2D collider2D) {
 
 		if (collider2D.gameObject.CompareTag("Power"))  {
-			GameManager.instance.UpdateScore(20);
+			GameManager.instance.UpdateScore(30);
 			Destroy(this.gameObject, 0.1f);
 		}
 

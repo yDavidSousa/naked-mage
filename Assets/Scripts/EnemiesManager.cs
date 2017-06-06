@@ -18,8 +18,9 @@ public class EnemiesManager : MonoBehaviour {
 	public bool waterEnemies = false, fireEnemies = false, flyingEnemies = false, inBattle = false;
 
 	public GameObject enemyEarth, enemyWater, enemyFire, enemyAir;
-	private Vector3 spawnPointGround1, spawnPointGround2, spawnPointAir1, spawnPointAir2, 
-					actualGroundSpawnPoint, actualAirSpawnPoint;
+	private Vector3 spawnPointGround1, spawnPointGround2, spawnPointGround3, spawnPointGround4,
+					spawnPointAir1, spawnPointAir2, spawnPointAir3, spawnPointAir4, 
+					castorSpawnPoint, actualGroundSpawnPoint, actualAirSpawnPoint;
 
 	void Awake () {
 		if (instance == null)
@@ -36,11 +37,16 @@ public class EnemiesManager : MonoBehaviour {
 		// define pontos de nascimento dos inimigos
 		spawnPointGround1 = new Vector3(1.741f, -0.457f, 0f);
 		spawnPointGround2 = new Vector3(-1.741f, -0.457f, 0f);
+		spawnPointGround3 = new Vector3(-1.741f, -0.084f, 0f);
+		spawnPointGround4 = new Vector3(-1.634f, 0.142f, 0f);
 		spawnPointAir1 = new Vector3(1.741f, 0.79f, 0f);
 		spawnPointAir2 = new Vector3(-1.741f, 0.79f, 0f);
+		spawnPointAir3 = new Vector3(-1.668f, 0.519f, 0f);
+		spawnPointAir4 = new Vector3(1.711f, 0.519f, 0f);
 
 		// inicializa os pontos de nascimento
 		actualAirSpawnPoint = spawnPointAir1;
+		castorSpawnPoint = spawnPointGround1;
 		actualGroundSpawnPoint = spawnPointGround1;
 
 		// chama primeira horda
@@ -78,7 +84,7 @@ public class EnemiesManager : MonoBehaviour {
 			for (j = 1 ; j <= 5; j++) {
 				switch (aleatoryEnemy()) {
 					case 0:
-						StartCoroutine(instantiateEnemy(enemyEarth, actualGroundSpawnPoint, j*i/2));
+						StartCoroutine(instantiateEnemy(enemyEarth, castorSpawnPoint, j*i/2));
 						break;
 					case 1:
 						StartCoroutine(instantiateEnemy(enemyWater, actualGroundSpawnPoint, j*i/2));
@@ -119,9 +125,21 @@ public class EnemiesManager : MonoBehaviour {
  	}
 
 	void ChangeSpawnPoint () {
-		actualAirSpawnPoint = (actualAirSpawnPoint == spawnPointAir1) ? spawnPointAir2 : spawnPointAir1;
-		actualGroundSpawnPoint = (actualGroundSpawnPoint == spawnPointGround1) ? 
-																		spawnPointGround2 : spawnPointGround1;
+		switch (Mathf.RoundToInt(Random.Range(0, 4))) {
+			case 0: actualAirSpawnPoint = spawnPointAir1; break;
+			case 1: actualAirSpawnPoint = spawnPointAir2; break;
+			case 2: actualAirSpawnPoint = spawnPointAir3; break;
+			default: actualAirSpawnPoint = spawnPointAir4; break;
+		}
+
+		switch (Mathf.RoundToInt(Random.Range(0, 4))) {
+			case 0: actualGroundSpawnPoint = spawnPointGround1; break;
+			case 1: actualGroundSpawnPoint = spawnPointGround2; break;
+			case 2: actualGroundSpawnPoint = spawnPointGround3; break;
+			default: actualGroundSpawnPoint = spawnPointGround4; break;
+		}
+
+		castorSpawnPoint = castorSpawnPoint == spawnPointGround1? spawnPointGround2 : spawnPointGround1;
 	}
 
 }

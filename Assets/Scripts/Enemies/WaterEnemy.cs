@@ -60,7 +60,7 @@ public class WaterEnemy : MonoBehaviour {
         attackDelay += Time.deltaTime;
 
         if (!Physics2D.Raycast(transform.position, Vector2.down, 0.15f, 1 << LayerMask.NameToLayer("Ground"))) // GRAVIDADE PARA QUEDA (:
-            transform.position += Vector3.down * velocity * Time.deltaTime;
+            transform.position += Vector3.down * 3f * Time.deltaTime;
 
         if (playerDistance < 0.9f && 
                         (actualState == EnemyStates.IDLE || actualState == EnemyStates.INGUARD))
@@ -114,7 +114,6 @@ public class WaterEnemy : MonoBehaviour {
             transform.rotation = Quaternion.identity;
             transform.position -= (difference < velocity * Time.deltaTime) ?
                                 Vector3.right * velocity * Time.deltaTime : Vector3.right * difference;
-            Debug.Log(difference);
         }
 
         if (Mathf.Abs(destiny.x - transform.position.x) <= 0.05f)
