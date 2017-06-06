@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class EarthEnemy : MonoBehaviour {
 
-
+    public AudioClip deathClip;
 	public Animator animator;
 	public bool inGround;
 	public float velocity = 0.1f;
@@ -56,6 +56,7 @@ public class EarthEnemy : MonoBehaviour {
 	void OnTriggerEnter2D (Collider2D collider2D) {
 
 		if (collider2D.gameObject.CompareTag("Power"))  {
+            SoundManager.instance.PlaySingle(deathClip);
 			GameManager.instance.UpdateScore(15);
 			Destroy(this.gameObject, 0.1f);
 		}

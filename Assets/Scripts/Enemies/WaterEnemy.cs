@@ -3,6 +3,7 @@ using UnityEngine;
 
 public class WaterEnemy : MonoBehaviour {
     public Animator animator;
+    public AudioClip deathClip;
 	public float velocity, playerDistance;
     public EnemyStates actualState;
 
@@ -131,6 +132,7 @@ public class WaterEnemy : MonoBehaviour {
 	void OnTriggerEnter2D (Collider2D collider2D) {
 
 		if (collider2D.gameObject.CompareTag("Power"))  {
+            SoundManager.instance.PlaySingle(deathClip);
 			GameManager.instance.UpdateScore(20);
 			Destroy(this.gameObject, 0.1f);
 		}

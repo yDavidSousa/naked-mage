@@ -4,11 +4,12 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour {
 	public static GameManager instance;
+	public AudioClip countDownClip;
 	public float playerHp, playerMana;
 	public bool playerDead, inPause;
 	public int score;
 	
-	public UnityEngine.UI.Image HUD_Life, HUD_Mana, HUD_Power;
+	public UnityEngine.UI.Image HUD_Life, HUD_Mana;
 	public UnityEngine.UI.Text scoreCounter, hordCounter, battleStart;
 	public GameObject mask, gigantPauseInMountains, bt_Menu, gameOver, inputPlayerName;
 
@@ -49,15 +50,16 @@ public class GameManager : MonoBehaviour {
 	}
 
 	public IEnumerator AlertNewHorde () {
+		SoundManager.instance.PlayInBackground(countDownClip, 0.4f);
 		hordCounter.text = "Horde " + EnemiesManager.instance.horde;
 		battleStart.text = "3";
-		yield return new WaitForSecondsRealtime(0.5f);
+		yield return new WaitForSecondsRealtime(0.9f);
 		battleStart.text = "2";
-		yield return new WaitForSecondsRealtime(0.5f);
+		yield return new WaitForSecondsRealtime(0.9f);
 		battleStart.text = "1";
-		yield return new WaitForSecondsRealtime(0.5f);
+		yield return new WaitForSecondsRealtime(0.9f);
 		battleStart.text = "Kill them all!";
-		yield return new WaitForSecondsRealtime(0.5f);
+		yield return new WaitForSecondsRealtime(1f);
 		battleStart.text = "";
 	}
 

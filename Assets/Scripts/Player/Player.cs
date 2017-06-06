@@ -15,7 +15,7 @@ public class Player : MonoBehaviour {
 
 	public Animator playerAnimator;
 	public float velocity, jumpHeigh;
-	public AudioClip attackClip, jumpClip, pickUpItem;
+	public AudioClip attackClip, jumpClip, pickUpItemClip, deathClip;
 	public bool horizontalMovement, verticalMovement, attack, jumping, inGround;
 
 	// controls
@@ -110,6 +110,7 @@ public class Player : MonoBehaviour {
 
 	void Die () {
 		GameManager.instance.playerDead = true;
+		SoundManager.instance.PlaySingle(deathClip);
 		// LANÇAR PREFAB DE MORTE
 		gameObject.SetActive(false);
 		Debug.Log("Player morreu");

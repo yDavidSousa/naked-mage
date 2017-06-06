@@ -5,7 +5,7 @@ using UnityEngine;
 public class SoundManager : MonoBehaviour {
 
 	public static SoundManager instance;
-	public AudioSource musicSource, efxSource;
+	public AudioSource musicSource, efxSource, backgroundSource;
 
 	void Awake () {
 		if (instance == null) 
@@ -23,5 +23,11 @@ public class SoundManager : MonoBehaviour {
 		efxSource.volume = volume;
 		efxSource.clip = clip;
 		efxSource.Play();
+	}
+
+	public void PlayInBackground (AudioClip clip, float volume) {
+		backgroundSource.volume = volume;
+		backgroundSource.clip = clip;
+		backgroundSource.Play();
 	}
 }

@@ -2,6 +2,7 @@ using UnityEngine;
 
 public class FireEnemy : MonoBehaviour {
     public Animator animator;
+    public AudioClip deathClip;
 	public float velocity, playerDistance;
 	public GameObject bombPrefab;
     public EnemyStates actualState;
@@ -133,6 +134,7 @@ public class FireEnemy : MonoBehaviour {
 	void OnTriggerEnter2D (Collider2D collider2D) {
 
 		if (collider2D.gameObject.CompareTag("Power"))  {
+            SoundManager.instance.PlaySingle(deathClip);
 			GameManager.instance.UpdateScore(25);
 			Destroy(this.gameObject, 0.1f);
 		}

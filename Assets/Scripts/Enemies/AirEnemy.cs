@@ -3,6 +3,8 @@ using UnityEngine;
 using DG.Tweening;
 
 public sealed class AirEnemy : MonoBehaviour {
+
+    public AudioClip deathClip;
     
     public Animator animator;
 	public float velocity = 0.5f, playerDistance;
@@ -112,6 +114,7 @@ public sealed class AirEnemy : MonoBehaviour {
 
 		if (collider2D.gameObject.CompareTag("Power"))  {
 			GameManager.instance.UpdateScore(30);
+            SoundManager.instance.PlaySingle(deathClip);
 			Destroy(this.gameObject, 0.1f);
 		}
 
